@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakai's Place</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    	   
+  <p id="Intro">Hi there Welcome to <br><strong><span style="font-size: 2em;">Zakai's Place</span></strong></p>
+    <div id="Dev">
+<h2 id = Games>The Games</h2>
+<a href="TicTac.html">
+  <div class="onecard">Tic Tac</div>
+</a>
+<a href="ConnectFour.html">
+  <div class="twocard">Connect Four</div>
+</a>
+<a>
+  <div class="threecard">Run Man</div>
+</a>
+<a>
+  <div class="fourcard">To The Rhythm</div>
+</a>
+</div>
+
+<h3>Feedback</h3>
+<div id="feedback-form">
+  <form id="feedbackForm">
+    <label for="feedback">Your Feedback:</label><br>
+    <textarea id="feedback" name="feedback" rows="4" cols="50"></textarea><br><br>
+    <input type="submit" value="Submit">
+  </form>
+</div>
+
+<script>
+  document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var feedback = document.getElementById('feedback').value;
+    var email = 'zakaiisrael00@gmail.com';
+
+    window.location.href = `mailto:${email}?subject=Course Feedback&body=${encodeURIComponent(feedback)}`;
+  });
+</script>
+    <footer id="last">
+      Made by Zakai Israel, to help a brotha out you can <a href="http://paypal.me/ZakaiIsrael">DONATE</a> to my PayPal.
+    </footer>
+    
+</body>
+</html>

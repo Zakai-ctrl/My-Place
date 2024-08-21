@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakai's Place: Tic Tac</title>
+</head>
+<body>
+<style>
+ body {
+  text-decoration-color: green;
+  text-align: center;
+  background-color: rgb(7, 7, 7);
+}
+#Tic {
+    color: green;
+}
+#restartButton, #backbutton, #toggleModeButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #080808;
+    color: rgb(4, 228, 23);
+}
+#restartButton:hover, #backbutton:hover, #toggleModeButton:hover {
+    box-shadow: 0 4px 8px rgb(25, 205, 9);
+}
+#game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#status {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: rgb(4, 228, 23);
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 5px;
+}
+
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    background-color: #080808;
+    border: 1px solid rgb(32, 216, 16);
+    border-radius: 10px;
+    font-size: 48px;
+    cursor: pointer;
+    color: rgb(4, 228, 23); /* Make X and O appear in green */
+}
+.cell:hover {
+    box-shadow: 0 4px 8px rgb(25, 205, 9);
+}
+</style>
+<p id="Tic">Welcome to Tic Tac <br><strong><span style="font-size: 2em;">Enjoy!</span></strong></p>
+<div id="game">
+    <div id="status"></div>
+    <div class="board" id="board">
+        <div class="cell" data-cell></div>
+         <div class="cell" data-cell></div>
+         <div class="cell" data-cell></div>
+         <div class="cell" data-cell></div>
+         <div class="cell" data-cell></div>
+         <div class="cell" data-cell></div>
+         <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+    </div>
+    <button id="restartButton">Restart</button>
+    <a href="index.html"> 
+        <button id="backbutton">Back</button>
+    </a>
+    <button id="toggleModeButton">Two Players</button>
+</div>
+<script>
+const cells = document.querySelectorAll('[data-cell]');
+const board = document.getElementById('board');
+const statusText = document.getElementById('status');
+const restartButton = document.getElementById('restartButton');
+const toggleModeButton = document.getElementById('toggleModeButton');
+let isXTurn = true;
+let gameActive = true;
+let isTwoPlayerMode = true; // Start with two players mode by default
+const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+];
+
+cells.forEach(cell => {
+    cell.addEventListener('click', handleCellClick, { once: true });
+});
+
+restartButton.addEventListener('click', restartGame);
+toggleModeButton.addEventListener('click', toggleMode);
+
+function handleCellClick(e) {
+    const cell = e.target;
+    const currentClass = isXTurn ? 'x' : 'o';
+    placeMark(cell, currentClass);
+    if (checkWin(currentClass)) {
+        endGame(false);
+    } else if (isDraw()) {
+        endGame(true);
+    } else {
+        swapTurns();
+        if (!isXTurn && !isTwoPlayerMode && gameActive) {
+            setTimeout(aiMove, 500); // AI move delay for one player mode
+        }
+    }
+}
+
+function placeMark(cell, currentClass) {
+    cell.textContent = isXTurn ? 'X' : 'O';
+}
+
+function swapTurns() {
+    isXTurn = !isXTurn;
+    setStatusText();
+}
+
+function setStatusText() {
+    statusText.textContent = isXTurn ? "X's turn" : "O's turn";
+}
+
+function checkWin(currentClass) {
+    return winningCombinations.some(combination => {
+        return combination.every(index => {
+            return cells[index].textContent === (currentClass === 'x' ? 'X' : 'O');
+        });
+    });
+}
+
+function isDraw() {
+    return [...cells].every(cell => {
+        return cell.textContent === 'X' || cell.textContent === 'O';
+    });
+}
+
+function endGame(draw) {
+    if (draw) {
+        statusText.textContent = "Draw!";
+    } else {
+        statusText.textContent = `${isXTurn ? "X" : "O"} wins!`;
+    }
+    gameActive = false;
+    cells.forEach(cell => {
+        cell.removeEventListener('click', handleCellClick);
+    });
+}
+
+function restartGame() {
+    isXTurn = true;
+    gameActive = true;
+    cells.forEach(cell => {
+        cell.textContent = '';
+        cell.addEventListener('click', handleCellClick, { once: true });
+    });
+    setStatusText();
+}
+
+function toggleMode() {
+    isTwoPlayerMode = !isTwoPlayerMode;
+    toggleModeButton.textContent = isTwoPlayerMode ? 'Two Players' : 'One Player';
+    restartGame();
+}
+
+function aiMove() {
+    const availableCells = [...cells].filter(cell => {
+        return cell.textContent === '';
+    });
+    const randomCell = availableCells[Math.floor(Math.random() * availableCells.length)];
+    if (randomCell) {
+        randomCell.click();
+    }
+}
+
+setStatusText();
+</script>
+</body>
+</html>
