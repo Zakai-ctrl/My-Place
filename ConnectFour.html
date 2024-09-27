@@ -76,10 +76,10 @@
 
         var gameOver = false;
         var board;
-        var currColums;
+        var currColumns;
 
         var rows = 6;
-        var colums = 7;
+        var columns = 7;
 
         window.onload = function(){
             setGame();
@@ -87,11 +87,11 @@
 
         function setGame(){
             board = [];
-            currColums = [5, 5, 5, 5, 5, 5, 5]
+            currColumns = [5, 5, 5, 5, 5, 5, 5]
 
             for (let r = 0; r < rows; r++) {
                 let row = [];
-                for(let c = 0; c < colums; c++) {
+                for(let c = 0; c < columns; c++) {
                     //JS
                     row.push(' ');
 
@@ -115,7 +115,7 @@
             let r = parseInt(coords[0]);
             let c = parseInt(coords[1]);
 
-            r = currColums[c];
+            r = currColumns[c];
             if (r<0) {
                 return;
             }
@@ -130,6 +130,38 @@
                 tile.classList.add("yellow-piece");
                 currPlayer = playerRed;
             }
+            r -= 1;
+            currColumns[c] = r;
+
+            checkWinner();
+        }
+
+        function checkWinner() {
+          //horizonally 
+          for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < columns - 3; c++) {
+                if (board[r][c] != ' ') {
+                    if (board[r][c] == board[r][c+1] && board[r][c+1] == board[r][c+2] && board[r][c+2] == board[r][c+3]) {
+                        setWinner(r,c);
+                        return;
+                    }
+                    
+                }
+            }
+          }
+        }
+
+        function setWinner(r,c) {
+            let winner = document.getElementById("winner");
+            if (board[r][c] == playerRed) {
+                winner.innerText ="Red Wins";
+
+            }else{
+                winner.innerText = "Yellow Wins";
+
+            }
+
+            gameOver = true;
         }
     </script>
  </body>
