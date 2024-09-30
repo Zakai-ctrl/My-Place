@@ -33,7 +33,7 @@
             height: 540px;
             width: 630px;
 
-            background-color: rgb(11, 98, 11);
+            background-color: blue;
             
 
             margin: 0 auto;
@@ -48,9 +48,9 @@
             width: 70px;
             margin: 5px;
 
-            background-color: rgb(53, 52, 52);
+            background-color: rgb(9, 9, 9);
             border-radius: 50%;
-            border: 5px solid rgb(7, 67, 7);
+            border: 5px solid navy;
         }
         .red-piece{
             background-color: red;
@@ -58,6 +58,11 @@
        
         .yellow-piece{
             background-color: yellow;
+        }
+
+        #winner{
+            text-align: center;
+            color: green;
         }
     </style>
 </head>
@@ -146,6 +151,18 @@
                         return;
                     }
                     
+                }
+            }
+          }
+
+          //vertically
+          for (let c = 0; c < columns; c++) {
+            for (let r = 0; r < rows-3; r++) {
+                if (board[r][c] != ' ') {
+                    if (board [r][c] == board[r+1][c] && board[r+1][c] == board[r+2][c] && board[r+2][c] == board[r+3][c]) {
+                    setWinner(r,c);
+                    return;
+                   }
                 }
             }
           }
